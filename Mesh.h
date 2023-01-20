@@ -7,6 +7,7 @@
 #include <d3dx12.h>
 #include <vector>
 #include <wrl.h>
+#include <unordered_map>
 
 /// <summary>
 /// 形状データ
@@ -19,6 +20,7 @@ class Mesh {
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
+	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
 
   public: // サブクラス
@@ -100,6 +102,11 @@ class Mesh {
 	/// <param name="cmdList">命令発行先コマンドリスト</param>
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
+	void AddSmoothData(unsigned short indexPosition, unsigned short indexVertex);
+
+	void CalculateSmoothedVertexNormals();
+
+	inline size_t GetVertexCount() { return vertices.size(); }
   private: // メンバ変数
 	// 名前
 	std::string name;
@@ -121,4 +128,5 @@ class Mesh {
 	VertexPosNormalUv* vertMap = nullptr;
 	// インデックスバッファのマップ
 	unsigned short* indexMap = nullptr;
+	std::unordered_map<unsigned short, std::vector<unsigned short>>smoothData;
 };
